@@ -4,47 +4,52 @@ package com.studyspot.model;
  * Represents a rating of a cafe.
  */
 public class Rating {
-    private double noiseLevel;
-    private double cleanliness;
-    private double lighting;
-    private double seating;
-    private double drinkQuality;
-    private double foodquality;
+    private int noiseLevel;
+    private int cleanliness;
+    private int lighting;
+    private int seating;
+    private int drinkQuality;
+    private int foodQuality;
 
     // constructs a Rating with the given noiseLevel, cleanliness, lighting, seating, drinkQuality,
     // and foodQuality
-    public Rating(double noiseLevel, double cleanliness, double lighting, double seating, 
-        double drinkQuality, double foodQuality) {
-        // stub
+    public Rating(int noiseLevel, int cleanliness, int lighting, int seating, 
+        int drinkQuality, int foodQuality) {
+        this.noiseLevel = noiseLevel;
+        this.cleanliness = cleanliness;
+        this.lighting = lighting;
+        this.seating = seating;
+        this.drinkQuality = drinkQuality;
+        this.foodQuality = foodQuality;
     }
 
     // EFFECTS: returns noiseLevel
-    public double getNoiseLevel() {
+    public int getNoiseLevel() {
         return -1; // stub
     }
 
     // EFFECTS: returns cleanliness
-    public double getCleanliness() {
+    public int getCleanliness() {
         return -1; // stub
     }
 
     // EFFECTS: returns lighting
-    public double getLighting() {
+    public int getLighting() {
         return -1; // stub
     }
 
     // EFFECTS: returns seating
-    public double getSeating() {
+    public int getSeating() {
         return -1; // stub
     }
 
     // EFFECTS: returns drinkQuality
-    public double getDrinkQuality() {
+    public int getDrinkQuality() {
         return -1; // stub
     }
 
     // EFFECTS: returns foodQuality
-    public double getFoodQuality() {
+    public int getFoodQuality() {
         return -1; // stub
     }
 }
