@@ -21,39 +21,33 @@ public class Cafe {
         // stub
     }
 
-    // EFFECTS: returns the average noise rating of the cafe in the format: "Noise Level: x/5";
-    // return N/A if there are no ratings
-    public String getAvgNoiseLevel() {
+    // EFFECTS: returns the average noise rating of the cafe or null if it has no ratings
+    public Double getAvgNoiseLevel() {
         return null; // stub
     }
 
-    // EFFECTS: returns the average cleanliness rating of the cafe in the format: "Cleanliness: x/5";
-    // return N/A if there are no ratings 
-    public String getAvgCleanliness() {
+    // EFFECTS: returns the average cleanliness rating of the cafe or null if it has no ratings
+    public Double getAvgCleanliness() {
         return null; // stub
     }
 
-    // EFFECTS: returns the average lighting rating of the cafe in the format: "Lighting: x/5";
-    // return N/A if there are no ratings
-    public String getAvgLighting() {
+    // EFFECTS: returns the average lighting rating of the cafe
+    public Double getAvgLighting() {
         return null; // stub
     }
 
-    // EFFECTS: returns the average seating rating of the cafe in the format: "Seating: x/5";
-    // return N/A if there are no ratings
-    public String getAvgSeating() {
+    // EFFECTS: returns the average seating rating of the cafe or null if it has no ratings
+    public Double getAvgSeating() {
         return null; // stub
     }
 
-    // EFFECTS: returns the average drink quality rating of the cafe in the format: "Drink Quality: 
-    // x/5"; return N/A if there are no ratings
-    public String getAvgDrinkQuality() {
+    // EFFECTS: returns the average drink quality rating of the cafe or null if it has no ratings
+    public Double getAvgDrinkQuality() {
         return null; // stub
     }
 
-    // EFFECTS: returns the average food quality rating of the cafe in the format: "Food Quality:
-    // x/5"; return N/A if there are no ratings
-    public String getAvgFoodQuality() {
+    // EFFECTS: returns the average food quality rating of the cafe or null if it has no ratings
+    public Double getAvgFoodQuality() {
         return null; // stub
     }
 
