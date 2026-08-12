@@ -25,31 +25,31 @@ public class Rating {
 
     // EFFECTS: returns noiseLevel
     public int getNoiseLevel() {
-        return -1; // stub
+        return noiseLevel;
     }
 
     // EFFECTS: returns cleanliness
     public int getCleanliness() {
-        return -1; // stub
+        return cleanliness;
     }
 
     // EFFECTS: returns lighting
     public int getLighting() {
-        return -1; // stub
+        return lighting;
     }
 
     // EFFECTS: returns seating
     public int getSeating() {
-        return -1; // stub
+        return seating;
     }
 
     // EFFECTS: returns drinkQuality
     public int getDrinkQuality() {
-        return -1; // stub
+        return drinkQuality;
     }
 
     // EFFECTS: returns foodQuality
     public int getFoodQuality() {
-        return -1; // stub
+        return foodQuality;
     }
 }
