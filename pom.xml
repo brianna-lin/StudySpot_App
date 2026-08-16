@@ -21,6 +21,13 @@
             <version>5.12.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- JavaFX -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>17.0.13</version>
+        </dependency>
     </dependencies>
 
 </project>
