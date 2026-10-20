@@ -9,12 +9,14 @@ import java.util.List;
 public class Cafe {
     private String name;
     private String address;
+    private String city;
     private List<Rating> ratings;
     
     // makes a cafe with given name, address, and no ratings
-    public Cafe(String name, String address) {
+    public Cafe(String name, String address, String city) {
         this.name = name;
         this.address = address;
+        this.city = city;
         ratings = new ArrayList<>();
     }
 
@@ -122,5 +124,10 @@ public class Cafe {
     // EFFECTS: returns the cafe's address
     public String getAddress() {
         return address;
+    }
+
+    // EFFECTS: returns the cafe's city
+    public String getCity() {
+        return city;
     }
 }
