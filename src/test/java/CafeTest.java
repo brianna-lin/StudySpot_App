@@ -11,13 +11,14 @@ public class CafeTest {
 
     @BeforeEach
     public void setup() {
-        testCafe = new Cafe("Starbucks", "123 W 10th St");
+        testCafe = new Cafe("Starbucks", "123 W 10th St", "Vancouver");
     }
 
     @Test
     public void testConstructor() {
         assertEquals("Starbucks", testCafe.getName());
         assertEquals("123 W 10th St", testCafe.getAddress());
+        assertEquals("Vancouver", testCafe.getCity());
 
         // to ensure it has been constructed with no ratings
         assertNull(testCafe.getAvgNoiseLevel());
