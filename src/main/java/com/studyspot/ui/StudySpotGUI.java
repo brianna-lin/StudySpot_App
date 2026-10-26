@@ -46,10 +46,7 @@ public class StudySpotGUI extends Application {
 
         // coffee cup icon next to title
         Image coffeeIcon = new Image(getClass().getResource("/coffeecup.png").toExternalForm());
-        ImageView coffeeIconView = new ImageView(coffeeIcon);
-        coffeeIconView.setFitHeight(45);
-        coffeeIconView.setFitWidth(45);
-        coffeeIconView.setPreserveRatio(true);
+        ImageView coffeeIconView = initCoffeeIcon(coffeeIcon);
 
         // change the icon of the window to the coffee cup image
         primaryStage.getIcons().add(coffeeIcon);
@@ -80,11 +77,7 @@ public class StudySpotGUI extends Application {
 
         updateCafeList(cafeList, cafes);
 
-        ScrollPane cafeScroll = new ScrollPane(cafeList);
-        cafeScroll.setFitToWidth(true);
-        cafeScroll.setMaxWidth(635);
-        cafeScroll.setPrefViewportHeight(300);
-        cafeScroll.setStyle("-fx-background: "+bgColorVal+";" + "-fx-background-color: "+bgColorVal+";");
+        ScrollPane cafeScroll = initCafeScroll(cafeList);
 
         root.getChildren().addAll(header, subHeader, searchField, subHeader2, cafeScroll);
 
@@ -94,6 +87,25 @@ public class StudySpotGUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    // EFFECTS: initializes the image view for the coffee cup icon
+    private ImageView initCoffeeIcon(Image coffeeIcon) {
+        ImageView coffeeIconView = new ImageView(coffeeIcon);
+        coffeeIconView.setFitHeight(45);
+        coffeeIconView.setFitWidth(45);
+        coffeeIconView.setPreserveRatio(true);
+        return coffeeIconView;
+    }
+
+    // EFFECTS: initializes cafe scroll pane
+    private ScrollPane initCafeScroll(VBox cafeList) {
+        ScrollPane cafeScroll = new ScrollPane(cafeList);
+        cafeScroll.setFitToWidth(true);
+        cafeScroll.setMaxWidth(635);
+        cafeScroll.setPrefViewportHeight(300);
+        cafeScroll.setStyle("-fx-background: "+bgColorVal+";" + "-fx-background-color: "+bgColorVal+";");
+        return cafeScroll;
     }
 
     // MODIFIES: cafeList
