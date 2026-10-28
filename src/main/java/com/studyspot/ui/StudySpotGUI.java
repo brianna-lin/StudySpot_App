@@ -2,6 +2,7 @@ package com.studyspot.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.studyspot.model.Cafe;
 import com.studyspot.model.Rating;
@@ -75,7 +76,11 @@ public class StudySpotGUI extends Application {
         VBox cafeList = new VBox();
         cafeList.setMaxWidth(600);
 
-        updateCafeList(cafeList, cafes);
+        updateCafeList(cafeList, cafes, "");
+
+        // searches according to user input
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> 
+            {updateCafeList(cafeList, cafes, newValue);});
 
         ScrollPane cafeScroll = initCafeScroll(cafeList);
 
@@ -110,10 +115,25 @@ public class StudySpotGUI extends Application {
 
     // MODIFIES: cafeList
     // EFFECTS: updates the displayed list of cafes according to the user's search input
-    private void updateCafeList(VBox cafeList, List<Cafe> cafes) {
+    private void updateCafeList(VBox cafeList, List<Cafe> cafes, String searchInput) {
         cafeList.getChildren().clear();
+
+        String input = searchInput.toLowerCase(Locale.ROOT).trim();
+
         for (Cafe c : cafes) {
-            cafeList.getChildren().add(createCafeCard(c));
+            boolean matchesName = c.getName().toLowerCase(Locale.ROOT).contains(input);
+            boolean matchesAddress = c.getAddress().toLowerCase(Locale.ROOT).contains(input);
+            boolean matchesCity = c.getCity().toLowerCase(Locale.ROOT).contains(input);
+
+            if (matchesName || matchesAddress || matchesCity) {
+                cafeList.getChildren().add(createCafeCard(c));
+            }
+        }
+
+        if (cafeList.getChildren().isEmpty()) {
+            Label noResults = new Label("No cafés match your search.");
+            noResults.setWrapText(true);
+            cafeList.getChildren().add(noResults);
         }
     }
 
