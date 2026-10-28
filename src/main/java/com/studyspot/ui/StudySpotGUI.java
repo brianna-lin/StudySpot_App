@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -126,7 +127,8 @@ public class StudySpotGUI extends Application {
             boolean matchesCity = c.getCity().toLowerCase(Locale.ROOT).contains(input);
 
             if (matchesName || matchesAddress || matchesCity) {
-                cafeList.getChildren().add(createCafeCard(c));
+                cafeList.getChildren().add(createCafeCard(c, 
+                    () -> updateCafeList(cafeList, cafes, searchInput)));
             }
         }
 
@@ -138,7 +140,7 @@ public class StudySpotGUI extends Application {
     }
 
     // EFFECTS: returns a display card of the cafe with its name, location, and a button to view its details
-    private VBox createCafeCard(Cafe cafe) {
+    private VBox createCafeCard(Cafe cafe, Runnable refreshCafeList) {
         Label nameLabel = new Label(cafe.getName());
         nameLabel.setFont(Font.font("Georgia", 20));
         nameLabel.setTextFill(Color.web(dBrownColorVal_2));
@@ -155,7 +157,7 @@ public class StudySpotGUI extends Application {
             "-fx-background-color: " + buttonColorVal + ";" 
             + "-fx-text-fill: white;" 
             + "-fx-background-radius: 7;");
-        detailsButton.setOnAction(event -> showCafeDetails(cafe));
+        detailsButton.setOnAction(event -> showCafeDetails(cafe, refreshCafeList));
 
         VBox cafeCard = new VBox(10, nameLabel, addressLabel, cityLabel, detailsButton);
         cafeCard.setPadding(new Insets(15));
@@ -170,7 +172,7 @@ public class StudySpotGUI extends Application {
     }
 
     // EFFECTS: displays the details of a given cafe (its name, location, and ratings)
-    private void showCafeDetails(Cafe cafe) {
+    private void showCafeDetails(Cafe cafe, Runnable refreshCafeList) {
         Stage detailsStage = new Stage();
         detailsStage.setTitle("StudySpot: " + cafe.getName());
 
@@ -202,27 +204,27 @@ public class StudySpotGUI extends Application {
         Label ratingsHeading = new Label("Average Ratings:");
         ratingsHeading.setFont(Font.font("Georgia", 18));
 
-        Label noiseLevelLabel = new Label("Noise Level: " + cafe.getAvgNoiseLevel() + "/5");
+        Label noiseLevelLabel = new Label("Noise Level: " + formatScore(cafe.getAvgNoiseLevel()));
         noiseLevelLabel.setFont(Font.font(15));
         noiseLevelLabel.setTextFill(Color.web(subTextColorVal));
 
-        Label cleanlinessLabel = new Label("Cleanliness: " + cafe.getAvgCleanliness() + "/5");
+        Label cleanlinessLabel = new Label("Cleanliness: " + formatScore(cafe.getAvgCleanliness()));
         cleanlinessLabel.setFont(Font.font(15));
         cleanlinessLabel.setTextFill(Color.web(subTextColorVal));
 
-        Label lightingLabel = new Label("Lighting: " + cafe.getAvgLighting() + "/5");
+        Label lightingLabel = new Label("Lighting: " + formatScore(cafe.getAvgLighting()));
         lightingLabel.setFont(Font.font(15));
         lightingLabel.setTextFill(Color.web(subTextColorVal));
 
-        Label seatingLabel = new Label("Seating: " + cafe.getAvgSeating() + "/5");
+        Label seatingLabel = new Label("Seating: " + formatScore(cafe.getAvgSeating()));
         seatingLabel.setFont(Font.font(15));
         seatingLabel.setTextFill(Color.web(subTextColorVal));
 
-        Label drinkQualityLabel = new Label("Drink Quality: " + cafe.getAvgDrinkQuality() + "/5");
+        Label drinkQualityLabel = new Label("Drink Quality: " + formatScore(cafe.getAvgDrinkQuality()));
         drinkQualityLabel.setFont(Font.font(15));
         drinkQualityLabel.setTextFill(Color.web(subTextColorVal));
 
-        Label foodQualityLabel = new Label("Food Quality: " + cafe.getAvgFoodQuality() + "/5");
+        Label foodQualityLabel = new Label("Food Quality: " + formatScore(cafe.getAvgFoodQuality()));
         foodQualityLabel.setFont(Font.font(15));
         foodQualityLabel.setTextFill(Color.web(subTextColorVal));
 
@@ -232,7 +234,17 @@ public class StudySpotGUI extends Application {
             + "-fx-text-fill: white;" 
             + "-fx-background-radius: 7;"
         );
-        rateButton.setOnAction(event -> showRatingForm(cafe));
+        rateButton.setOnAction(event -> showRatingForm(cafe, () -> 
+            {
+                noiseLevelLabel.setText("Noise Level: " + formatScore(cafe.getAvgNoiseLevel()));
+                cleanlinessLabel.setText("Cleanliness: " + formatScore(cafe.getAvgCleanliness()));
+                lightingLabel.setText("Lighting: " + formatScore(cafe.getAvgLighting()));
+                seatingLabel.setText("Seating: " + formatScore(cafe.getAvgSeating()));
+                drinkQualityLabel.setText("Drink Quality: " + formatScore(cafe.getAvgDrinkQuality()));
+                foodQualityLabel.setText("Food Quality: " + formatScore(cafe.getAvgFoodQuality()));
+
+                refreshCafeList.run();
+            }));
 
         detailsRoot.getChildren().addAll(
             nameLabel, 
@@ -255,10 +267,18 @@ public class StudySpotGUI extends Application {
         detailsStage.show();
     }
 
+    // EFFECTS: formats the score to show two decimal places
+    String formatScore(Double score) {
+        if (score == null) {
+            return "No ratings yet";
+        }
+        return String.format(Locale.ROOT, "%.1f/5", score);
+    }
+
     // MODIFIES: cafe
     // EFFECTS: displays a ratings form that lets the user rate the cafe; if the user submits a valid rating,
     // add that new rating to the cafe's list of ratings
-    private void showRatingForm(Cafe cafe) {
+    private void showRatingForm(Cafe cafe, Runnable submittedRating) {
         Stage ratingsStage = new Stage();
         ratingsStage.setTitle("StudySpot: Rate " + cafe.getName());
 
@@ -273,16 +293,28 @@ public class StudySpotGUI extends Application {
 
         Label title = new Label("Rate " + cafe.getName());
         title.setFont(Font.font("Georgia", 25));
-        title.setStyle("-fx-font-color: " + dBrownColorVal_1 + ";");
+        title.setTextFill(Color.web(dBrownColorVal_1));
 
-        GridPane scores = makeScoreGridPane();
+        ComboBox<Integer> noiseLvl = makeScoreBox();
+        ComboBox<Integer> cleanliness = makeScoreBox();
+        ComboBox<Integer> lighting = makeScoreBox();
+        ComboBox<Integer> seating = makeScoreBox();
+        ComboBox<Integer> drinkQuality = makeScoreBox();
+        ComboBox<Integer> foodQuality = makeScoreBox();
 
-        Button addRatingButton = new Button("Add Rating");
-        addRatingButton.setStyle(
-            "-fx-background-color: " + buttonColorVal + ";" 
-            + "-fx-text-fill: white;" 
-            + "-fx-background-radius: 7;"
-        );
+        GridPane scores = new GridPane();
+        scores.setHgap(10);
+        scores.setVgap(10);
+
+        scores.addRow(0, new Label("Noise Level\n(5 is very quiet, 1 is very loud)"), noiseLvl);
+        scores.addRow(1, new Label("Cleanliness"), cleanliness);
+        scores.addRow(2, new Label("Lighting"), lighting);
+        scores.addRow(3, new Label("Seating"), seating);
+        scores.addRow(4, new Label("Drink Quality"), drinkQuality);
+        scores.addRow(5, new Label("Food Quality"), foodQuality);
+
+        Button addRatingButton = makeAddRatingButton(cafe, noiseLvl, cleanliness, lighting, seating,
+            drinkQuality, foodQuality, ratingsStage, submittedRating);
 
         ratingsRoot.getChildren().addAll(
             title, 
@@ -297,35 +329,61 @@ public class StudySpotGUI extends Application {
         ratingsStage.show();
     }
 
-    // EFFECTS: makes the scoring gridpane for the rating form
-    private GridPane makeScoreGridPane() {
-        ComboBox<Integer> noiseLvl = makeScoreBox();
-        ComboBox<Integer> cleanliness = makeScoreBox();
-        ComboBox<Integer> lighting = makeScoreBox();
-        ComboBox<Integer> seating = makeScoreBox();
-        ComboBox<Integer> drinkQualtiy = makeScoreBox();
-        ComboBox<Integer> foodQuality = makeScoreBox();
-
-        GridPane scores = new GridPane();
-        scores.setHgap(10);
-        scores.setVgap(10);
-
-        scores.addRow(0, new Label("Noise Level\n(5 is very quiet, 1 is very loud)"), noiseLvl);
-        scores.addRow(1, new Label("Cleanliness"), cleanliness);
-        scores.addRow(2, new Label("Lighting"), lighting);
-        scores.addRow(3, new Label("Seating"), seating);
-        scores.addRow(4, new Label("Drink Quality"), drinkQualtiy);
-        scores.addRow(5, new Label("Food Quality"), foodQuality);
-
-        return scores;
-    }
-
     // EFFECTS: makes 5 checkboxes numbered 1-5 that the user can select when making a rating
     private ComboBox<Integer> makeScoreBox() {
         ComboBox<Integer> scores = new ComboBox<>();
         scores.setPromptText("Select");
         scores.getItems().addAll(1, 2, 3, 4, 5);
         return scores;
+    }
+
+    // MODIFIES: cafe (upon submitting rating)
+    // EFFECTS: makes the rating button for the rating form
+    private Button makeAddRatingButton(Cafe cafe, ComboBox<Integer> noiseLvl, ComboBox<Integer> cleanliness,
+        ComboBox<Integer> lighting, ComboBox<Integer> seating, ComboBox<Integer> drinkQuality,
+        ComboBox<Integer> foodQuality, Stage stage, Runnable submittedRating) {
+
+        Button addRatingButton = new Button("Add Rating");
+
+        addRatingButton.setStyle(
+            "-fx-background-color: " + buttonColorVal + ";" 
+            + "-fx-text-fill: white;" 
+            + "-fx-background-radius: 7;"
+        );
+
+        addRatingButton.setOnAction(event -> {
+            if (noiseLvl.getValue() == null || 
+                cleanliness.getValue() == null || 
+                lighting.getValue() == null ||
+                seating.getValue() == null || 
+                drinkQuality.getValue() == null ||
+                foodQuality.getValue() == null) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Incomplete Rating");
+                    alert.setHeaderText("Please rate each category.");
+                    alert.showAndWait();
+                    return;
+            }
+
+            Rating rating = new Rating(noiseLvl.getValue(), 
+                cleanliness.getValue(), 
+                lighting.getValue(), 
+                seating.getValue(), 
+                drinkQuality.getValue(), 
+                foodQuality.getValue());
+
+            cafe.addRating(rating);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Rating Submitted");
+            alert.setHeaderText("Thank you for rating " + cafe.getName() + "!");
+            alert.showAndWait();
+
+            stage.close();
+            submittedRating.run();
+        });
+
+        return addRatingButton;
     }
 
     // EFFECTS: creates a couple sample cafes with ratings
