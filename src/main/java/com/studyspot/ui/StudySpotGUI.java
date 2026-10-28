@@ -255,23 +255,7 @@ public class StudySpotGUI extends Application {
         title.setFont(Font.font("Georgia", 25));
         title.setStyle("-fx-font-color: " + dBrownColorVal_1 + ";");
 
-        ComboBox<Integer> noiseLvl = makeScoreBox();
-        ComboBox<Integer> cleanliness = makeScoreBox();
-        ComboBox<Integer> lighting = makeScoreBox();
-        ComboBox<Integer> seating = makeScoreBox();
-        ComboBox<Integer> drinkQualtiy = makeScoreBox();
-        ComboBox<Integer> foodQuality = makeScoreBox();
-
-        GridPane scores = new GridPane();
-        scores.setHgap(10);
-        scores.setVgap(10);
-
-        scores.addRow(0, new Label("Noise Level\n(5 is very quiet, 1 is very loud)"), noiseLvl);
-        scores.addRow(1, new Label("Cleanliness"), cleanliness);
-        scores.addRow(2, new Label("Lighting"), lighting);
-        scores.addRow(3, new Label("Seating"), seating);
-        scores.addRow(4, new Label("Drink Quality"), drinkQualtiy);
-        scores.addRow(5, new Label("Food Quality"), foodQuality);
+        GridPane scores = makeScoreGridPane();
 
         Button addRatingButton = new Button("Add Rating");
         addRatingButton.setStyle(
@@ -291,6 +275,29 @@ public class StudySpotGUI extends Application {
         ratingsStage.setScene(ratingsScene);
         ratingsStage.setResizable(false);
         ratingsStage.show();
+    }
+
+    // EFFECTS: makes the scoring gridpane for the rating form
+    private GridPane makeScoreGridPane() {
+        ComboBox<Integer> noiseLvl = makeScoreBox();
+        ComboBox<Integer> cleanliness = makeScoreBox();
+        ComboBox<Integer> lighting = makeScoreBox();
+        ComboBox<Integer> seating = makeScoreBox();
+        ComboBox<Integer> drinkQualtiy = makeScoreBox();
+        ComboBox<Integer> foodQuality = makeScoreBox();
+
+        GridPane scores = new GridPane();
+        scores.setHgap(10);
+        scores.setVgap(10);
+
+        scores.addRow(0, new Label("Noise Level\n(5 is very quiet, 1 is very loud)"), noiseLvl);
+        scores.addRow(1, new Label("Cleanliness"), cleanliness);
+        scores.addRow(2, new Label("Lighting"), lighting);
+        scores.addRow(3, new Label("Seating"), seating);
+        scores.addRow(4, new Label("Drink Quality"), drinkQualtiy);
+        scores.addRow(5, new Label("Food Quality"), foodQuality);
+
+        return scores;
     }
 
     // EFFECTS: makes 5 checkboxes numbered 1-5 that the user can select when making a rating
